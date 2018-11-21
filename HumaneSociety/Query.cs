@@ -220,15 +220,22 @@ namespace HumaneSociety
             updateAdoption.ApprovalStatus = result ? "APPROVED" : "PENDING";
             db.SubmitChanges();
         }
-        internal static void GetShots()
+        internal static IQueryable<AnimalShot> GetShots(Animal animal)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            //return db.Categories.Where(c => c.Name == categoryID).Select(c => c.CategoryId).Single();
+            return db.AnimalShots.Where(c => c.AnimalId == animal.AnimalId);
 
         }
-        internal static void UpdateShot()
+        internal static void UpdateShot(string booster, Animal animal)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            //AnimalShot updateAnimalShot = new AnimalShot();
+            AnimalShot updateAnimalShot = db.AnimalShots.Where(u => u.AnimalId == animal.AnimalId).Single();
 
+            updateAnimalShot.AnimalId = animal.AnimalId;
+            updateAnimalShot.DateReceived = DateTime.Now;
+            db.SubmitChanges();
         }
         internal static void RemoveAnimal()
         {
@@ -276,12 +283,12 @@ namespace HumaneSociety
                 }
                 else if (item.Key == 5)
                 {
-                    bool kidFriendly = item.Value.ToUpper() == "YES" ? true : false;
+                    bool kidFriendly = item.Value.ToUpper() == "TRUE" ? true : false;
                     updateAnimal.KidFriendly = kidFriendly;
                 }
                 else if (item.Key == 6)
                 {
-                    bool petFriendly = item.Value.ToUpper() == "YES" ? true : false;
+                    bool petFriendly = item.Value.ToUpper() == "TRUE" ? true : false;
                     updateAnimal.PetFriendly = petFriendly;
                 }
                 else if (item.Key == 7)
