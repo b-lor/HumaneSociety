@@ -217,8 +217,7 @@ namespace HumaneSociety
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
 
             //Can put in UI??
-			//
-            Console.WriteLine("What criteria would you like to search for? Enter the corresponding number.");
+            Console.WriteLine("What criterion would you like to search by? Enter the corresponding numbers, seperated by a space.");
             Console.WriteLine("Enter [1] to search by the animal's name");
             Console.WriteLine("Enter [2] to search by the animal's gender");
             Console.WriteLine("Enter [3] to search by the animal's age");
@@ -227,86 +226,106 @@ namespace HumaneSociety
             Console.WriteLine("Enter [6] to search for an animal that is kid friendly");
             Console.WriteLine("Enter [7] to search for an animal that is pet friendly");
 
-            // should userChoice be a list???
-            var userChoice = int.Parse(Console.ReadLine());
+            List<string> userChoice = Console.ReadLine().Split(' ').ToList();
             var animalsFromDb = db.Animals.ToList();
 
-            switch (userChoice)
+            foreach (string u in userChoice)
             {
-                case 1:
-                    Console.WriteLine("Enter the name of the animal you wish to search: ");
-                    var animalNameChoice = Console.ReadLine();
+                int searchCriteria = int.Parse(u);
 
-                    db.Animals.Where(a => a.Name == animalNameChoice);
-                    break;
+                switch (searchCriteria)
+                {
 
-                case 2:
-                    Console.WriteLine("Enter the gender of the animal you wish to search: [M] or [F] ");
-                    var animalGenderChoice = Console.ReadLine().ToUpper();
+                    case 1:
+                        Console.WriteLine("Enter the name of the animal you wish to search: ");
+                        var animalNameChoice = Console.ReadLine();
 
-                    db.Animals.Where(a => a.Gender == animalGenderChoice);
+                        var refinedNameSearch = from animal in animalsFromDb
+                                                where animal.Name == animalNameChoice
+                                                select animal;
+
+                        animalsFromDb = refinedNameSearch.ToList();
+                        break;
+
+                    case 2:
+                        Console.WriteLine("Enter the gender of the animal you wish to search: [M] or [F] ");
+                        var animalGenderChoice = Console.ReadLine().ToUpper();
+
+                        var refinedGenderSearch = from animal in animalsFromDb
+                                                  where animal.Gender == animalGenderChoice
+                                                  select animal;
+
+                        animalsFromDb = refinedGenderSearch.ToList();
+                        break;
 
                     //TERNARY option??
                     //var genderToSearchBy = animalGenderChoice == "M" ? SearchByMale() : SearchByFemale();
                     //create methods for male and female
-                    break;
 
-                case 3:
-                    Console.WriteLine("Enter the age of the animal you wish to search: ");
-                    var animalAgeChoice = int.Parse(Console.ReadLine());
+                    case 3:
+                        Console.WriteLine("Enter the age of the animal you wish to search: ");
+                        var animalAgeChoice = int.Parse(Console.ReadLine());
 
-                    db.Animals.Where(a => a.Age == animalAgeChoice);
-                    break;
+                        var refinedAgeSearch = from animal in animalsFromDb
+                                               where animal.Age == animalAgeChoice
+                                               select animal;
 
-                case 4:
-                    Console.WriteLine("Enter the demeanor of the animal you wish to search: ");
-                    var animalDemeanorChoice = Console.ReadLine();
+                        animalsFromDb = refinedAgeSearch.ToList();
+                        break;
 
-                    db.Animals.Where(a => a.Demeanor == animalDemeanorChoice);
-                    break;
+                    case 4:
+                        Console.WriteLine("Enter the demeanor of the animal you wish to search: ");
+                        var animalDemeanorChoice = Console.ReadLine();
 
-                case 5:
-                    //Might have to list options by categoryID 
-                    //switch case for animal type in UI??
-    
-                    Console.WriteLine("Enter the type of animal you wish to search: ");
-                    var animalTypeChoice = Console.ReadLine();
+                        var refinedDemeanorSearch = from animal in animalsFromDb
+                                                    where animal.Demeanor == animalDemeanorChoice
+                                                    select animal;
 
-                    db.Categories.Where(c => c.Name == animalTypeChoice);
-                    break;
+                        animalsFromDb = refinedDemeanorSearch.ToList();
+                        break;
 
-                case 6:
-                    Console.WriteLine("Do you want your search to include kid friendly animals?: [Y] or [N] ");
-                    var kidFriendlyChoice = Console.ReadLine().ToUpper();
+                    case 5:
+                        //Might have to list options by categoryID 
 
-                    if(kidFriendlyChoice == "Y")
-                    {
-                        db.Animals.Where(a => a.KidFriendly == true);
-                    }
-                    else
-                    {
-                        db.Animals.Where(a => a.KidFriendly == false);
-                    }
-                    break;
+                        Console.WriteLine("Enter the type of animal you wish to search: ");
+                        var animalTypeChoice = Console.ReadLine();
 
-                case 7:
-                    Console.WriteLine("Do you want your search to include pet friendly animals?: [Y] or [N] ");
-                    var petFriendlyChoice = Console.ReadLine().ToUpper();
+                        var refinedTypeSearch = from animal in animalsFromDb
+                                                where animal.Category.Name == animalTypeChoice
+                                                select animal;
 
-                    if(petFriendlyChoice == "Y")
-                    {
-                        db.Animals.Where(a => a.PetFriendly == true);
-                    }
-                    else
-                    {
-                        db.Animals.Where(a => a.PetFriendly == false);
-                    }
-                    break;
+                        animalsFromDb = refinedTypeSearch.ToList();
+                        break;
 
-                default:
-                    Console.WriteLine("Couldn't process your request. Please enter a valid criteria to search by.");
-                    SearchForAnimalByMultipleTraits();
-                    break;
+                    case 6:
+                        Console.WriteLine("Do you want your search to include kid friendly animals?: [Y] or [N] ");
+                        bool? kidFriendlyChoice = (Console.ReadLine().ToUpper() == "Y");
+
+                        var refinedKidFriendlySearch = from animal in animalsFromDb
+                                                       where animal.KidFriendly == kidFriendlyChoice
+                                                       select animal;
+
+                        animalsFromDb = refinedKidFriendlySearch.ToList();
+                        //db.Animals.Where(a => a.KidFriendly == true);
+                        break;
+
+                    case 7:
+                        Console.WriteLine("Do you want your search to include pet friendly animals?: [Y] or [N] ");
+                        bool? petFriendlyChoice = (Console.ReadLine().ToUpper() == "Y");
+
+                        var refinedPetFriendlySearch = from animal in animalsFromDb
+                                                       where animal.PetFriendly == petFriendlyChoice
+                                                       select animal;
+
+                        animalsFromDb = refinedPetFriendlySearch.ToList();
+                        break;
+
+                    default:
+                        Console.WriteLine("Couldn't process your request. Please enter a valid criteria to search by.");
+                        SearchForAnimalByMultipleTraits();
+                        break;
+                }
+
             }
 
             return animalsFromDb;
@@ -343,7 +362,7 @@ namespace HumaneSociety
         internal static void RemoveAnimal(Animal animal)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
-            Animal deleteAnimal = db.Animals.Where(x => x.AnimalId == animal.AnimalId).Single();
+            Animal deleteAnimal = db.Animals.Where(x => x.AnimalId.Equals(animal.AnimalId)).Single();
 
             db.Animals.DeleteOnSubmit(deleteAnimal);
             db.SubmitChanges();
@@ -351,12 +370,12 @@ namespace HumaneSociety
         internal static int GetCategoryId(string categoryID)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
-            return db.Categories.Where(c => c.Name == categoryID).Select(c => c.CategoryId).Single();
+            return db.Categories.Where(c => c.CategoryId.Equals(categoryID)).Select(c => c.CategoryId).Single();
         }
         internal static int GetDietPlanId(string dietPlanID)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
-            return db.DietPlans.Where(d => d.Name == dietPlanID).Select(d => d.DietPlanId).Single();
+            return db.DietPlans.Where(d => d.DietPlanId.Equals(dietPlanID)).Select(d => d.DietPlanId).Single();
         }
         internal static void EnterAnimalUpdate(Animal animal, Dictionary<int, string> dictionary)
         {
@@ -418,7 +437,7 @@ namespace HumaneSociety
         internal static Room GetRoom(int animalID)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
-            return db.Rooms.Where(r => r.AnimalId == animalID).Single();
+            return db.Rooms.Where(r => r.AnimalId.Equals(animalID)).Single();
         }
     }
 }
