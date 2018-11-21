@@ -22,7 +22,7 @@ namespace HumaneSociety
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
 
-            Client client = db.Clients.Where(c => c.Username == userName && c.Password == password).Single();
+            Client client = db.Clients.Where(c => c.UserName == userName && c.Password == password).Single();
 
             return client;
         }
@@ -59,7 +59,7 @@ namespace HumaneSociety
                 newAddress.Zipcode = zipCode;
                 newAddress.USStateId = stateId;
 
-                db.Addresses.Add(newAddress);
+                db.Addresses.InsertOnSubmit(newAddress);
                 db.SubmitChanges();
 
                 addressFromDb = newAddress;
@@ -68,7 +68,7 @@ namespace HumaneSociety
             // attach AddressId to clientFromDb.AddressId
             newClient.AddressId = addressFromDb.AddressId;
 
-            db.Clients.Add(newClient);
+            db.Clients.InsertOnSubmit(newClient);
 
             db.SubmitChanges();
         }
@@ -102,7 +102,7 @@ namespace HumaneSociety
                 newAddress.Zipcode = clientAddress.Zipcode;
                 newAddress.USStateId = clientAddress.USStateId;
 
-                db.Addresses.Add(newAddress);
+                db.Addresses.InsertOnSubmit(newAddress);
                 db.SubmitChanges();
 
                 updatedAddress = newAddress;
@@ -163,59 +163,78 @@ namespace HumaneSociety
 
         internal static void RunEmployeeQueries()
         {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
 
         }
         internal static void GetAnimalByID()
         {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
 
         }
         internal static void Adopt()
         {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
 
         }
         internal static void SearchForAnimalByMultipleTraits()
         {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
 
         }
 
-        internal static void GetPendingAdoptions()
+        internal static IQueryable<Adoption> GetPendingAdoptions()
         {
-
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            //return db.Categories.Where(c => c.Name == categoryID).Select(c => c.CategoryId).Single();
+            var adoption = db.Adoptions.Where(a => a.ApprovalStatus.ToUpper() == "PENDING");
+            return adoption;
         }
-        internal static void UpdateAdoption()
+        internal static void UpdateAdoption(bool result, Adoption adoption)
         {
-
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var updateAdoption = db.Adoptions.Where(a => a.ClientId == adoption.ClientId).First();
+            updateAdoption.ApprovalStatus = result ? "APPROVED" : "PENDING";
+            db.SubmitChanges();
         }
         internal static void GetShots()
         {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
 
         }
         internal static void UpdateShot()
         {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
 
         }
         internal static void RemoveAnimal()
         {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+
 
         }
-        internal static void GetCategoryId()
+        internal static int GetCategoryId(string categoryID)
         {
-
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            return db.Categories.Where(c => c.Name == categoryID).Select(c => c.CategoryId).Single();
         }
-        internal static void GetDietPlanId()
+        internal static int GetDietPlanId(string dietPlanID)
         {
-
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            return db.DietPlans.Where(d => d.Name == dietPlanID).Select(d => d.DietPlanId).Single();
         }
         internal static void EnterAnimalUpdate()
         {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
 
         }
-        internal static void AddAnimal()
+        internal static void AddAnimal(Animal animal)
         {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
 
         }
         internal static void GetRoom()
         {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
 
         }
     }

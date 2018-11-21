@@ -76,7 +76,7 @@ namespace HumaneSociety
                 int input = UserInterface.GetIntegerData();
                 ApproveAdoption(adoptions[input - 1]);
             }
-
+        
         }
 
         private void ApproveAdoption(Adoption adoption)
@@ -96,6 +96,7 @@ namespace HumaneSociety
 
         private void CheckAnimalStatus()
         {
+
             Console.Clear();            
             var animals = Query.SearchForAnimalByMultipleTraits().ToList();
             if(animals.Count > 1)
@@ -247,14 +248,19 @@ namespace HumaneSociety
         {
             Console.Clear();
             Animal animal = new Animal();
-            animal.CategoryId = Query.GetCategoryId();
+
+            string categoryID = UserInterface.GetStringData("category", "the animal's");
+            animal.CategoryId = Query.GetCategoryId(categoryID);
+
             animal.Name = UserInterface.GetStringData("name", "the animal's");
             animal.Age = UserInterface.GetIntegerData("age", "the animal's");
             animal.Demeanor = UserInterface.GetStringData("demeanor", "the animal's");
             animal.KidFriendly = UserInterface.GetBitData("the animal", "child friendly");
             animal.PetFriendly = UserInterface.GetBitData("the animal", "pet friendly");
             animal.Weight = UserInterface.GetIntegerData("the animal", "the weight of the");
-            animal.DietPlanId = Query.GetDietPlanId();
+
+            string dietPlanID = UserInterface.GetStringData("the animal", "the animal's");
+            animal.DietPlanId = Query.GetDietPlanId(dietPlanID);
             Query.AddAnimal(animal);
         }
         protected override void LogInPreExistingUser()
