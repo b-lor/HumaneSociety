@@ -190,26 +190,119 @@ namespace HumaneSociety
                     break;
             }
         }
-        internal static void GetAnimalByID()
+        internal static int GetAnimalByID(int animalID)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
-
+            return db.Animals.Where(a => a.AnimalId == animalID).Select(a => a.AnimalId).Single();
         }
         internal static void Adopt()
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
 
         }
-        internal static void SearchForAnimalByMultipleTraits()
+        internal static List<Animal> SearchForAnimalByMultipleTraits()
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
 
+            //Can put in UI??
+			//
+            Console.WriteLine("What criteria would you like to search for? Enter the corresponding number.");
+            Console.WriteLine("Enter [1] to search by the animal's name");
+            Console.WriteLine("Enter [2] to search by the animal's gender");
+            Console.WriteLine("Enter [3] to search by the animal's age");
+            Console.WriteLine("Enter [4] to search by the animal's demeanor");
+            Console.WriteLine("Enter [5] to search by the type of animal");
+            Console.WriteLine("Enter [6] to search for an animal that is kid friendly");
+            Console.WriteLine("Enter [7] to search for an animal that is pet friendly");
+
+            // should userChoice be a list???
+            var userChoice = int.Parse(Console.ReadLine());
+            var animalsFromDb = db.Animals.ToList();
+
+            switch (userChoice)
+            {
+                case 1:
+                    Console.WriteLine("Enter the name of the animal you wish to search: ");
+                    var animalNameChoice = Console.ReadLine();
+
+                    db.Animals.Where(a => a.Name == animalNameChoice);
+                    break;
+
+                case 2:
+                    Console.WriteLine("Enter the gender of the animal you wish to search: [M] or [F] ");
+                    var animalGenderChoice = Console.ReadLine().ToUpper();
+
+                    db.Animals.Where(a => a.Gender == animalGenderChoice);
+
+                    //TERNARY option??
+                    //var genderToSearchBy = animalGenderChoice == "M" ? SearchByMale() : SearchByFemale();
+                    //create methods for male and female
+                    break;
+
+                case 3:
+                    Console.WriteLine("Enter the age of the animal you wish to search: ");
+                    var animalAgeChoice = int.Parse(Console.ReadLine());
+
+                    db.Animals.Where(a => a.Age == animalAgeChoice);
+                    break;
+
+                case 4:
+                    Console.WriteLine("Enter the demeanor of the animal you wish to search: ");
+                    var animalDemeanorChoice = Console.ReadLine();
+
+                    db.Animals.Where(a => a.Demeanor == animalDemeanorChoice);
+                    break;
+
+                case 5:
+                    //Might have to list options by categoryID 
+                    //switch case for animal type in UI??
+    
+                    Console.WriteLine("Enter the type of animal you wish to search: ");
+                    var animalTypeChoice = Console.ReadLine();
+
+                    db.Categories.Where(c => c.Name == animalTypeChoice);
+                    break;
+
+                case 6:
+                    Console.WriteLine("Do you want your search to include kid friendly animals?: [Y] or [N] ");
+                    var kidFriendlyChoice = Console.ReadLine().ToUpper();
+
+                    if(kidFriendlyChoice == "Y")
+                    {
+                        db.Animals.Where(a => a.KidFriendly == true);
+                    }
+                    else
+                    {
+                        db.Animals.Where(a => a.KidFriendly == false);
+                    }
+                    break;
+
+                case 7:
+                    Console.WriteLine("Do you want your search to include pet friendly animals?: [Y] or [N] ");
+                    var petFriendlyChoice = Console.ReadLine().ToUpper();
+
+                    if(petFriendlyChoice == "Y")
+                    {
+                        db.Animals.Where(a => a.PetFriendly == true);
+                    }
+                    else
+                    {
+                        db.Animals.Where(a => a.PetFriendly == false);
+                    }
+                    break;
+
+                default:
+                    Console.WriteLine("Couldn't process your request. Please enter a valid criteria to search by.");
+                    SearchForAnimalByMultipleTraits();
+                    break;
+            }
+
+            return animalsFromDb;
         }
 
         internal static IQueryable<Adoption> GetPendingAdoptions()
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
-            //return db.Categories.Where(c => c.Name == categoryID).Select(c => c.CategoryId).Single();
             var adoption = db.Adoptions.Where(a => a.ApprovalStatus.ToUpper() == "PENDING");
             return adoption;
         }
@@ -223,25 +316,25 @@ namespace HumaneSociety
         internal static IQueryable<AnimalShot> GetShots(Animal animal)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
-            //return db.Categories.Where(c => c.Name == categoryID).Select(c => c.CategoryId).Single();
             return db.AnimalShots.Where(c => c.AnimalId == animal.AnimalId);
 
         }
         internal static void UpdateShot(string booster, Animal animal)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
-            //AnimalShot updateAnimalShot = new AnimalShot();
             AnimalShot updateAnimalShot = db.AnimalShots.Where(u => u.AnimalId == animal.AnimalId).Single();
 
             updateAnimalShot.AnimalId = animal.AnimalId;
             updateAnimalShot.DateReceived = DateTime.Now;
             db.SubmitChanges();
         }
-        internal static void RemoveAnimal()
+        internal static void RemoveAnimal(Animal animal)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            Animal deleteAnimal = db.Animals.Where(x => x.AnimalId == animal.AnimalId).Single();
 
-
+            db.Animals.DeleteOnSubmit(deleteAnimal);
+            db.SubmitChanges();
         }
         internal static int GetCategoryId(string categoryID)
         {
