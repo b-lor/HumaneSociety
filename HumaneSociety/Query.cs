@@ -246,9 +246,55 @@ namespace HumaneSociety
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
             return db.DietPlans.Where(d => d.Name == dietPlanID).Select(d => d.DietPlanId).Single();
         }
-        internal static void EnterAnimalUpdate()
+        internal static void EnterAnimalUpdate(Animal animal, Dictionary<int, string> dictionary)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+
+            Animal updateAnimal = db.Animals.Where(a => a.AnimalId == animal.AnimalId).Single();
+            //--https://social.msdn.microsoft.com/Forums/vstudio/en-US/c98e9d32-7f06-4b3a-8917-8b58eee31e58/change-dictionary-values-while-iterating?forum=netfxbcl
+
+            //"1. Category", "2. Name", "3. Age", "4. Demeanor", "5. Kid friendly", "6. Pet friendly", "7. Weight", "8. Finished"
+            foreach (KeyValuePair<int, string> item in dictionary)
+            {
+                if (item.Key == 1)
+                {
+                    int categoryID = Convert.ToInt32(item.Value);
+                    updateAnimal.CategoryId = categoryID;
+                }
+                else if (item.Key == 2)
+                {
+                    updateAnimal.Name = item.Value;
+                }
+                else if (item.Key == 3)
+                {
+                    int age = Convert.ToInt32(item.Value);
+                    updateAnimal.Age = age;
+                }
+                else if (item.Key == 4)
+                {
+                    updateAnimal.Demeanor = item.Value;
+                }
+                else if (item.Key == 5)
+                {
+                    bool kidFriendly = item.Value.ToUpper() == "YES" ? true : false;
+                    updateAnimal.KidFriendly = kidFriendly;
+                }
+                else if (item.Key == 6)
+                {
+                    bool petFriendly = item.Value.ToUpper() == "YES" ? true : false;
+                    updateAnimal.PetFriendly = petFriendly;
+                }
+                else if (item.Key == 7)
+                {
+                    int weight = Convert.ToInt32(item.Value);
+                    updateAnimal.Weight = weight;
+                }
+                else if (item.Key == 8)
+                {
+                    // Finished
+                }
+            }
+
 
         }
         internal static void AddAnimal(Animal animal)
