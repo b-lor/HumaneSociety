@@ -400,7 +400,8 @@ namespace HumaneSociety
         internal static void AddAnimal(Animal animal)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
-
+            db.Animals.InsertOnSubmit(animal);
+            db.SubmitChanges();
         }
         internal static void GetRoom()
         {
