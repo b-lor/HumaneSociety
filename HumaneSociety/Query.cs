@@ -190,15 +190,27 @@ namespace HumaneSociety
                     break;
             }
         }
-        internal static int GetAnimalByID(int animalID)
+        internal static Animal GetAnimalByID(int iD)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
-            return db.Animals.Where(a => a.AnimalId == animalID).Select(a => a.AnimalId).Single();
-        }
-        internal static void Adopt()
-        {
-            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            //return db.Animals.Where(a => a.AnimalId == animalID).Select(a => a.AnimalId).Single();
 
+            var animals = (from i in db.Animals where i.AnimalId.Equals(iD) select i).Single();
+            return animals;
+        }
+        internal static void Adopt(Animal animal, Client client)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            Adoption adoption = new Adoption();
+            adoption.AnimalId = animal.AnimalId;
+            adoption.ClientId = client.ClientId;
+            adoption.ApprovalStatus = "PENDING";
+            adoption.AdoptionFee = 75;
+            db.Adoptions.InsertOnSubmit(adoption);
+
+            var statusUpdate = db.Animals.Where(a => a.AnimalId == animal.AnimalId).First();
+            statusUpdate.AdoptionStatus = "PENDING";
+            db.SubmitChanges();
         }
         internal static List<Animal> SearchForAnimalByMultipleTraits()
         {
@@ -403,10 +415,10 @@ namespace HumaneSociety
             db.Animals.InsertOnSubmit(animal);
             db.SubmitChanges();
         }
-        internal static void GetRoom()
+        internal static Room GetRoom(int animalID)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
-
+            return db.Rooms.Where(r => r.AnimalId == animalID).Single();
         }
     }
 }
