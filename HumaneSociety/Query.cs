@@ -161,10 +161,34 @@ namespace HumaneSociety
             db.SubmitChanges();
         }
 
-        internal static void RunEmployeeQueries()
+        // Link for employee -https://www.tutorialspoint.com/linq/linq_sql.htm
+        internal static void RunEmployeeQueries(Employee employee, string input)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
 
+            switch (input)
+            {
+                case "create":
+                    db.Employees.InsertOnSubmit(employee);
+                    db.SubmitChanges();
+                    break;
+                case "delete":
+                    var deleteEmployee = db.Employees.Where(d => d.LastName == employee.LastName && d.EmployeeNumber == employee.EmployeeNumber).Single();
+                    db.Employees.DeleteOnSubmit(deleteEmployee);
+                    db.SubmitChanges();
+                    break;
+                case "read":
+                    break;
+                case "update":
+                    Employee updateEmployee = db.Employees.Where(u => u.EmployeeNumber == employee.EmployeeNumber).Single();
+                    updateEmployee.FirstName = employee.FirstName;
+                    updateEmployee.LastName = employee.LastName;
+                    updateEmployee.Email = employee.Email;
+                    db.SubmitChanges();
+                    break;
+                default:
+                    break;
+            }
         }
         internal static void GetAnimalByID()
         {
