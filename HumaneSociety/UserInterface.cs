@@ -219,5 +219,19 @@ namespace HumaneSociety
                     return searchParameters;
             }
         }
+
+        internal static void DisplayCategory()
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            Console.WriteLine("Current Category List\n");
+            Console.WriteLine("Name:");
+            var category = db.Categories.Select(c => c).ToList();
+            {
+                foreach (Category list in category)
+                {
+                    Console.WriteLine(list.Name);
+                }
+            }
+        }
     }
 }

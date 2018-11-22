@@ -369,8 +369,32 @@ namespace HumaneSociety
         }
         internal static int GetCategoryId(string categoryID)
         {
+
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
-            return db.Categories.Where(c => c.CategoryId.Equals(categoryID)).Select(c => c.CategoryId).Single();
+            UserEmployee userEmployee = new UserEmployee();
+
+            var categoryName = db.Categories.FirstOrDefault(i => i.Name == categoryID);
+            if (categoryName == null)
+            {
+                Console.Clear();
+                Console.WriteLine("The category you've entered does not exist\n");
+                Console.WriteLine($"Adding {categoryID} to database\n");
+                addNewCategory(categoryID);
+
+            }
+            var categoryId = db.Categories.Where(c => c.Name == categoryID).Select(i => i.CategoryId).SingleOrDefault();
+            return categoryId;
+
+            //return db.Categories.Where(c => c.CategoryId.Equals(categoryID)).Select(c => c.CategoryId).FirstOrDefault();
+        }
+
+        internal static void addNewCategory(string name)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            Category categoryToAdd = new Category();
+            categoryToAdd.Name = name;
+            db.Categories.InsertOnSubmit(categoryToAdd);
+            db.SubmitChanges();
         }
         internal static int GetDietPlanId(string dietPlanID)
         {

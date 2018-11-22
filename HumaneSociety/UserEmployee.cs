@@ -248,7 +248,7 @@ namespace HumaneSociety
         {
             Console.Clear();
             Animal animal = new Animal();
-
+            UserInterface.DisplayCategory();
             string categoryID = UserInterface.GetStringData("category", "the animal's");
             animal.CategoryId = Query.GetCategoryId(categoryID);
 
