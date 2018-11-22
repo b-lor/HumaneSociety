@@ -223,11 +223,25 @@ namespace HumaneSociety
         internal static void DisplayCategory()
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
-            Console.WriteLine("Current Category List\n");
-            Console.WriteLine("Name:");
+            Console.Clear();
+            Console.WriteLine("Current Category List:\n");
             var category = db.Categories.Select(c => c).ToList();
             {
                 foreach (Category list in category)
+                {
+                    Console.WriteLine(list.Name);
+                }
+            }
+        }
+
+        internal static void DisplayDietPlan()
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            Console.Clear();
+            Console.WriteLine("Current Diet Plans Avaiable:\n");
+            var dietPlan = db.DietPlans.Select(d => d).ToList();
+            {
+                foreach (DietPlan list in dietPlan)
                 {
                     Console.WriteLine(list.Name);
                 }

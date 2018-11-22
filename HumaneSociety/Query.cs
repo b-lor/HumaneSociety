@@ -369,9 +369,7 @@ namespace HumaneSociety
         }
         internal static int GetCategoryId(string categoryID)
         {
-
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
-            UserEmployee userEmployee = new UserEmployee();
 
             var categoryName = db.Categories.FirstOrDefault(i => i.Name == categoryID);
             if (categoryName == null)
@@ -380,7 +378,6 @@ namespace HumaneSociety
                 Console.WriteLine("The category you've entered does not exist\n");
                 Console.WriteLine($"Adding {categoryID} to database\n");
                 addNewCategory(categoryID);
-
             }
             var categoryId = db.Categories.Where(c => c.Name == categoryID).Select(i => i.CategoryId).SingleOrDefault();
             return categoryId;
@@ -399,8 +396,31 @@ namespace HumaneSociety
         internal static int GetDietPlanId(string dietPlanID)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
-            return db.DietPlans.Where(d => d.DietPlanId.Equals(dietPlanID)).Select(d => d.DietPlanId).Single();
+            var dietName = db.DietPlans.FirstOrDefault(d => d.Name == dietPlanID);
+            if (dietName == null)
+            {
+                Console.Clear();
+                Console.WriteLine("The diet plan you've entered does not exist\n");
+                Console.WriteLine($"Adding {dietPlanID} to database\n");
+                addNewDietPlan(dietPlanID);
+            }
+            var dietId = db.DietPlans.Where(c => c.Name == dietPlanID).Select(i => i.DietPlanId).SingleOrDefault();
+            return dietId;
+
+            //return db.DietPlans.Where(d => d.DietPlanId.Equals(dietPlanID)).Select(d => d.DietPlanId).Single();
         }
+
+        internal static void addNewDietPlan(string name)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            DietPlan dietPlanToAdd = new DietPlan();
+            dietPlanToAdd.Name = name;
+            dietPlanToAdd.FoodType = UserInterface.GetStringData("type is", "the food");
+            dietPlanToAdd.FoodAmountInCups = UserInterface.GetIntegerData("cup is", "Serving size in ");
+            db.DietPlans.InsertOnSubmit(dietPlanToAdd);
+            db.SubmitChanges();
+        }
+
         internal static void EnterAnimalUpdate(Animal animal, Dictionary<int, string> dictionary)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
@@ -461,7 +481,13 @@ namespace HumaneSociety
         internal static Room GetRoom(int animalID)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
-            return db.Rooms.Where(r => r.AnimalId.Equals(animalID)).Single();
+            return db.Rooms.Where(r => r.AnimalId ==animalID).SingleOrDefault();
+        }
+
+        internal static void CreateRoom()
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+
         }
     }
 }
