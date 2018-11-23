@@ -477,6 +477,7 @@ namespace HumaneSociety
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
             db.Animals.InsertOnSubmit(animal);
             db.SubmitChanges();
+            CreateRoom();
         }
         internal static Room GetRoom(int animalID)
         {
@@ -487,6 +488,36 @@ namespace HumaneSociety
         internal static void CreateRoom()
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            Room room = new Room();
+            room.RoomNumber = db.Rooms.Max(r => r.RoomNumber)+1;
+            db.Rooms.InsertOnSubmit(room);
+            db.SubmitChanges();
+            AssignRoom(); 
+        }
+
+        internal static void AssignRoom()
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            IQueryable<Room> room = db.Rooms;
+            foreach (Room row in room)
+            {
+                if (row.AnimalId == null)
+                {
+                    row.AnimalId = db.Animals.Max(i => i.AnimalId);
+                    db.SubmitChanges();
+                    return;
+                }
+            }
+
+            //Room room = new Room();
+            //var openRoom = db.Rooms.FirstOrDefault(r => r.AnimalId == null);
+            //Room room = new Room();
+            //if (openRoom == null)
+            //{
+            //    Animal animal = new Animal();
+            //    room.AnimalId = animal.AnimalId;
+            //}
+            //db.SubmitChanges();
 
         }
     }
