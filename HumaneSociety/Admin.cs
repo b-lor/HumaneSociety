@@ -69,9 +69,10 @@ namespace HumaneSociety
         private void UpdateEmployee()
         {
             Employee employee = new Employee();
+            employee.EmployeeNumber = int.Parse(UserInterface.GetStringData("employee number", "the employee's"));
             employee.FirstName = UserInterface.GetStringData("first name", "the employee's");
             employee.LastName = UserInterface.GetStringData("last name", "the employee's");
-            employee.EmployeeId = int.Parse(UserInterface.GetStringData("employee number", "the employee's"));
+            //employee.EmployeeId = int.Parse(UserInterface.GetStringData("employee number", "the employee's"));
             employee.Email = UserInterface.GetStringData("email", "the employee's");
             try
             {
@@ -88,10 +89,12 @@ namespace HumaneSociety
 
         private void ReadEmployee()
         {
+            Employee employee = new Employee();
+            employee.EmployeeNumber = int.Parse(UserInterface.GetStringData("employee number", "the employee's"));
             try
             {
-                Employee employee = new Employee();
-                employee.EmployeeNumber = int.Parse(UserInterface.GetStringData("employee number", "the employee's"));
+                //Employee employee = new Employee();
+                //employee.EmployeeNumber = int.Parse(UserInterface.GetStringData("employee number", "the employee's"));
                 Query.RunEmployeeQueries(employee, "read");
             }
             catch
@@ -123,10 +126,12 @@ namespace HumaneSociety
 
         private void AddEmployee()
         {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
             Employee employee = new Employee();
             employee.FirstName = UserInterface.GetStringData("first name", "the employee's");
             employee.LastName = UserInterface.GetStringData("last name", "the employee's");
-            employee.EmployeeNumber = int.Parse(UserInterface.GetStringData("employee number", "the employee's"));
+            employee.EmployeeNumber = db.Employees.Max(n => n.EmployeeNumber) + 1;
+            //employee.EmployeeNumber = int.Parse(UserInterface.GetStringData("employee number", "the employee's"));
             employee.Email = UserInterface.GetStringData("email", "the employee's"); ;
             try
             {

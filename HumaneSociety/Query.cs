@@ -178,9 +178,19 @@ namespace HumaneSociety
                     db.SubmitChanges();
                     break;
                 case "read":
-                    break;
+                    var employeeList = db.Employees.Where(r => r.EmployeeNumber == employee.EmployeeNumber).ToList();
+                    {
+                        foreach (Employee list in employeeList)
+                        {
+                            Console.WriteLine($"Employee ID: {list.EmployeeNumber}\nEmployee Name: { list.FirstName} {list.LastName}\nEmail: {list.Email}");
+                            Console.ReadKey();
+                        }
+                    }
+
+                        break;
+
                 case "update":
-                    Employee updateEmployee = db.Employees.Where(u => u.EmployeeNumber == employee.EmployeeNumber).Single();
+                    Employee updateEmployee = db.Employees.FirstOrDefault(u => u.EmployeeNumber == employee.EmployeeNumber);
                     updateEmployee.FirstName = employee.FirstName;
                     updateEmployee.LastName = employee.LastName;
                     updateEmployee.Email = employee.Email;
@@ -195,7 +205,7 @@ namespace HumaneSociety
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
             //return db.Animals.Where(a => a.AnimalId == animalID).Select(a => a.AnimalId).Single();
 
-            var animals = (from i in db.Animals where i.AnimalId.Equals(iD) select i).Single();
+            var animals = (from i in db.Animals where i.AnimalId.Equals(iD) select i).SingleOrDefault();
             return animals;
         }
         internal static void Adopt(Animal animal, Client client)

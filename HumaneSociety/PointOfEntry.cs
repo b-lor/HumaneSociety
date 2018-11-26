@@ -61,13 +61,13 @@ namespace HumaneSociety
             //customer = new Customer();
             //customer.LogIn();
 
-            UserEmployee employee;
-            employee = new UserEmployee();
-            employee.LogIn();
+            //UserEmployee employee;
+            //employee = new UserEmployee();
+            //employee.LogIn();
 
-            //Admin admin;
-            //admin = new Admin();
-            //admin.LogIn();
+            Admin admin;
+            admin = new Admin();
+            admin.LogIn();
         }
         //0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
     }
