@@ -241,7 +241,9 @@ namespace HumaneSociety
             List<string> options = new List<string>() { "Animal found:", animal.Name, animal.Category.Name, "would you like to delete?" };
             if ((bool)UserInterface.GetBitData(options))
             {
+                Query.RemoveAnimalFromRoom(animal);
                 Query.RemoveAnimal(animal);
+
             }
         }
         private void AddAnimal()

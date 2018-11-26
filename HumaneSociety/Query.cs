@@ -334,7 +334,7 @@ namespace HumaneSociety
         internal static IQueryable<Adoption> GetPendingAdoptions()
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
-            var adoption = db.Adoptions.Where(a => a.ApprovalStatus.ToUpper() == "PENDING");
+            var adoption = db.Adoptions.Where(a => a.ApprovalStatus == "PENDING");
             return adoption;
         }
         internal static void UpdateAdoption(bool result, Adoption adoption)
@@ -363,10 +363,18 @@ namespace HumaneSociety
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
             Animal deleteAnimal = db.Animals.Where(x => x.AnimalId.Equals(animal.AnimalId)).Single();
-
             db.Animals.DeleteOnSubmit(deleteAnimal);
             db.SubmitChanges();
         }
+
+        internal static void RemoveAnimalFromRoom(Animal animal)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            Room deleteRoom = db.Rooms.Where(r => r.AnimalId.Equals(animal.AnimalId)).Single();
+            db.Rooms.DeleteOnSubmit(deleteRoom);
+            db.SubmitChanges();
+        }
+
         internal static int GetCategoryId(string categoryID)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
@@ -466,7 +474,7 @@ namespace HumaneSociety
                 }
                 else if (item.Key == 8)
                 {
-                    // Finished
+                    //finished
                 }
             }
 
@@ -502,6 +510,7 @@ namespace HumaneSociety
             foreach (Room row in room)
             {
                 if (row.AnimalId == null)
+
                 {
                     row.AnimalId = db.Animals.Max(i => i.AnimalId);
                     db.SubmitChanges();
