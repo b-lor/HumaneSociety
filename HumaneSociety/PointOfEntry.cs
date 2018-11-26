@@ -56,23 +56,6 @@ namespace HumaneSociety
             }
 
         }
-        //0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-        //public static void Run()
-        //{
-        //    List<string> options = new List<string>() ;
 
-        //    //Customer customer;
-        //    //customer = new Customer();
-        //    //customer.LogIn();
-
-        //    //UserEmployee employee;
-        //    //employee = new UserEmployee();
-        //    //employee.LogIn();
-
-        //    Admin admin;
-        //    admin = new Admin();
-        //    admin.LogIn();
-        //}
-        //0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
     }
 }

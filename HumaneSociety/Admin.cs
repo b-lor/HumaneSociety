@@ -21,13 +21,6 @@ namespace HumaneSociety
                 RunUserMenus();
             }
         }
-        //0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-        //public override void LogIn()
-        //{
-        //        RunUserMenus();
-        //}
-        //0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-
 
         protected override void RunUserMenus()
         {
@@ -130,6 +123,8 @@ namespace HumaneSociety
             Employee employee = new Employee();
             employee.FirstName = UserInterface.GetStringData("first name", "the employee's");
             employee.LastName = UserInterface.GetStringData("last name", "the employee's");
+            employee.UserName = UserInterface.GetStringData("username", "the employee's");
+            employee.Password = UserInterface.GetStringData("password", "the employee's");
             employee.EmployeeNumber = db.Employees.Max(n => n.EmployeeNumber) + 1;
             //employee.EmployeeNumber = int.Parse(UserInterface.GetStringData("employee number", "the employee's"));
             employee.Email = UserInterface.GetStringData("email", "the employee's"); ;

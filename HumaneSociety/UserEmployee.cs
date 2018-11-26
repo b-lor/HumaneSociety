@@ -26,7 +26,7 @@ namespace HumaneSociety
         }
         protected override void RunUserMenus()
         {
-            List<string> options = new List<string>() { "What would you like to do? (select number of choice)", "1. Add animal", "2. Remove Anmial", "3. Check Animal Status",  "4. Approve Adoption" };
+            List<string> options = new List<string>() { "What would you like to do? (select number of choice)", "1. Add animal", "2. Remove Anmial", "3. Check Animal Status",  "4. Approve Adoption", "5. Edit Meal Plan" };
             UserInterface.DisplayUserOptions(options);
             string input = UserInterface.GetUserInput();
             RunUserInput(input);
@@ -51,11 +51,20 @@ namespace HumaneSociety
                     CheckAdoptions();
                     RunUserMenus();
                     return;
+                case "5":
+                    EditMeal();
+                    RunUserMenus();
+                    return;
                 default:
                     UserInterface.DisplayUserOptions("Input not accepted please try again");
                     RunUserMenus();
                     return;
             }
+        }
+        private void EditMeal()
+        {
+            string editPlan = UserInterface.GetStringData("the animal", "the animal's diet plan");
+            Query.EditDietPlan(editPlan);
         }
 
         private void CheckAdoptions()
@@ -181,27 +190,6 @@ namespace HumaneSociety
             }
             
         }
-        ////////////////////////////////////
-        //private void UpdateAnimal(Animal animal, Dictionary<int, string> updates = null)
-        //{
-        //    if(updates == null)
-        //    {
-        //        updates = new Dictionary<int, string>();
-        //    }
-        //    List<string> options = new List<string>() { "Select Updates: (Enter number and choose finished when finished)", "1. Category", "2. Name", "3. Age", "4. Demeanor", "5. Kid friendly", "6. Pet friendly", "7. Weight", "8. Finished" };
-        //    UserInterface.DisplayUserOptions(options);
-        //    string input = UserInterface.GetUserInput();
-        //    if(input.ToLower() == "8" ||input.ToLower() == "finished")
-        //    {
-        //        Query.EnterAnimalUpdate(animal, updates);
-        //    }
-        //    else
-        //    {
-        //        updates = UserInterface.EnterSearchCriteria(updates, input);
-        //        UpdateAnimal(animal);
-        //    }
-        //}
-        /////////////////////////////////////
  
         public void UpdateAnimal(Animal animal)
         {

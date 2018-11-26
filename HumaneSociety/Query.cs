@@ -135,7 +135,7 @@ namespace HumaneSociety
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
 
-            Employee employeeFromDb = db.Employees.Where(e => e.UserName == userName && e.Password == password).FirstOrDefault();
+            Employee employeeFromDb = db.Employees.Where(e => e.UserName == userName && e.Password == password).Single();
 
             return employeeFromDb;
         }
@@ -409,6 +409,21 @@ namespace HumaneSociety
             db.Categories.InsertOnSubmit(categoryToAdd);
             db.SubmitChanges();
         }
+        //////////////////////////////////////
+        internal static void EditDietPlan(string editPlan)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            DietPlan updateDietPlan = db.DietPlans.FirstOrDefault(d => d.Name == editPlan);
+        
+            //updateDietPlan.Name = UserInterface.GetStringData("name", "The diet plan's");
+            updateDietPlan.FoodType = UserInterface.GetStringData("food type", "The diet plan's new");
+            updateDietPlan.FoodAmountInCups = int.Parse(UserInterface.GetStringData("in cup serving", "The food amount"));
+            db.SubmitChanges();
+
+        }
+
+        /////////////////////////////////////////////
+    
         internal static int GetDietPlanId(string dietPlanID)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
@@ -436,61 +451,6 @@ namespace HumaneSociety
             db.DietPlans.InsertOnSubmit(dietPlanToAdd);
             db.SubmitChanges();
         }
-
-        //internal static void EnterAnimalUpdate(Animal animal, Dictionary<int, string> dictionary)
-        //{
-        //    HumaneSocietyDataContext db = new HumaneSocietyDataContext();
-        //    Animal updateAnimal = new Animal();
-        //    //updateAnimal = db.Animals.Where(a => a.AnimalId == animal.AnimalId).Single();
-        //    //--https://social.msdn.microsoft.com/Forums/vstudio/en-US/c98e9d32-7f06-4b3a-8917-8b58eee31e58/change-dictionary-values-while-iterating?forum=netfxbcl
-
-        //    //"1. Category", "2. Name", "3. Age", "4. Demeanor", "5. Kid friendly", "6. Pet friendly", "7. Weight", "8. Finished"
-        //    foreach (KeyValuePair<int, string> item in dictionary)
-        //    {
-        //        if (item.Key == 1)
-        //        {
-        //            int categoryID = Convert.ToInt32(item.Value);
-        //            updateAnimal.CategoryId = categoryID;
-        //        }
-        //        else if (item.Key == 2)
-        //        {
-        //            updateAnimal.Name = item.Value;
-        //        }
-        //        else if (item.Key == 3)
-        //        {
-        //            int age = Convert.ToInt32(item.Value);
-        //            updateAnimal.Age = age;
-        //        }
-        //        else if (item.Key == 4)
-        //        {
-        //            updateAnimal.Demeanor = item.Value;
-        //        }
-        //        else if (item.Key == 5)
-        //        {
-        //            bool kidFriendly = item.Value.ToUpper() == "TRUE" ? true : false;
-        //            updateAnimal.KidFriendly = kidFriendly;
-        //        }
-        //        else if (item.Key == 6)
-        //        {
-        //            bool petFriendly = item.Value.ToUpper() == "TRUE" ? true : false;
-        //            updateAnimal.PetFriendly = petFriendly;
-        //        }
-        //        else if (item.Key == 7)
-        //        {
-        //            Console.WriteLine("Hello Kitty");
-        //            Console.ReadLine();
-        //            int weight = Convert.ToInt32(item.Value);
-        //            updateAnimal.Weight = weight;
-        //        }
-        //        else if (item.Key == 8)
-        //        {
-        //            //finished
-        //        }
-        //    }
-
-
-        //}
-
 
         internal static void EnterAnimalUpdate(Animal animal)
         {
