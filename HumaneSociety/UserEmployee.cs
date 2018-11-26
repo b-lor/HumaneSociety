@@ -181,25 +181,35 @@ namespace HumaneSociety
             }
             
         }
-
-        private void UpdateAnimal(Animal animal, Dictionary<int, string> updates = null)
+        ////////////////////////////////////
+        //private void UpdateAnimal(Animal animal, Dictionary<int, string> updates = null)
+        //{
+        //    if(updates == null)
+        //    {
+        //        updates = new Dictionary<int, string>();
+        //    }
+        //    List<string> options = new List<string>() { "Select Updates: (Enter number and choose finished when finished)", "1. Category", "2. Name", "3. Age", "4. Demeanor", "5. Kid friendly", "6. Pet friendly", "7. Weight", "8. Finished" };
+        //    UserInterface.DisplayUserOptions(options);
+        //    string input = UserInterface.GetUserInput();
+        //    if(input.ToLower() == "8" ||input.ToLower() == "finished")
+        //    {
+        //        Query.EnterAnimalUpdate(animal, updates);
+        //    }
+        //    else
+        //    {
+        //        updates = UserInterface.EnterSearchCriteria(updates, input);
+        //        UpdateAnimal(animal);
+        //    }
+        //}
+        /////////////////////////////////////
+ 
+        public void UpdateAnimal(Animal animal)
         {
-            if(updates == null)
-            {
-                updates = new Dictionary<int, string>();
-            }
+            Console.Clear();
             List<string> options = new List<string>() { "Select Updates: (Enter number and choose finished when finished)", "1. Category", "2. Name", "3. Age", "4. Demeanor", "5. Kid friendly", "6. Pet friendly", "7. Weight", "8. Finished" };
             UserInterface.DisplayUserOptions(options);
-            string input = UserInterface.GetUserInput();
-            if(input.ToLower() == "9" ||input.ToLower() == "finished")
-            {
-                Query.EnterAnimalUpdate(animal, updates);
-            }
-            else
-            {
-                updates = UserInterface.EnterSearchCriteria(updates, input);
-                UpdateAnimal(animal);
-            }
+            //string input = UserInterface.GetUserInput();
+            Query.EnterAnimalUpdate(animal);
         }
 
         private void CheckAnimalStatus(int iD)

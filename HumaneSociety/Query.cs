@@ -94,7 +94,7 @@ namespace HumaneSociety
             Address updatedAddress = db.Addresses.Where(a => a.AddressLine1 == clientAddress.AddressLine1 && a.USStateId == clientAddress.USStateId && a.Zipcode == clientAddress.Zipcode).FirstOrDefault();
 
             // if the address isn't found in the Db, create and insert it
-            if(updatedAddress == null)
+            if (updatedAddress == null)
             {
                 Address newAddress = new Address();
                 newAddress.AddressLine1 = clientAddress.AddressLine1;
@@ -110,7 +110,7 @@ namespace HumaneSociety
 
             // attach AddressId to clientFromDb.AddressId
             clientFromDb.AddressId = updatedAddress.AddressId;
-            
+
             // submit changes
             db.SubmitChanges();
         }
@@ -121,14 +121,14 @@ namespace HumaneSociety
 
             Employee employeeFromDb = db.Employees.Where(e => e.Email == email && e.EmployeeNumber == employeeNumber).FirstOrDefault();
 
-            if(employeeFromDb == null)
+            if (employeeFromDb == null)
             {
-                throw new NullReferenceException();            
+                throw new NullReferenceException();
             }
             else
             {
                 return employeeFromDb;
-            }            
+            }
         }
 
         internal static Employee EmployeeLogin(string userName, string password)
@@ -186,9 +186,7 @@ namespace HumaneSociety
                             Console.ReadKey();
                         }
                     }
-
-                        break;
-
+                    break;
                 case "update":
                     Employee updateEmployee = db.Employees.FirstOrDefault(u => u.EmployeeNumber == employee.EmployeeNumber);
                     updateEmployee.FirstName = employee.FirstName;
@@ -439,57 +437,180 @@ namespace HumaneSociety
             db.SubmitChanges();
         }
 
-        internal static void EnterAnimalUpdate(Animal animal, Dictionary<int, string> dictionary)
+        //internal static void EnterAnimalUpdate(Animal animal, Dictionary<int, string> dictionary)
+        //{
+        //    HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+        //    Animal updateAnimal = new Animal();
+        //    //updateAnimal = db.Animals.Where(a => a.AnimalId == animal.AnimalId).Single();
+        //    //--https://social.msdn.microsoft.com/Forums/vstudio/en-US/c98e9d32-7f06-4b3a-8917-8b58eee31e58/change-dictionary-values-while-iterating?forum=netfxbcl
+
+        //    //"1. Category", "2. Name", "3. Age", "4. Demeanor", "5. Kid friendly", "6. Pet friendly", "7. Weight", "8. Finished"
+        //    foreach (KeyValuePair<int, string> item in dictionary)
+        //    {
+        //        if (item.Key == 1)
+        //        {
+        //            int categoryID = Convert.ToInt32(item.Value);
+        //            updateAnimal.CategoryId = categoryID;
+        //        }
+        //        else if (item.Key == 2)
+        //        {
+        //            updateAnimal.Name = item.Value;
+        //        }
+        //        else if (item.Key == 3)
+        //        {
+        //            int age = Convert.ToInt32(item.Value);
+        //            updateAnimal.Age = age;
+        //        }
+        //        else if (item.Key == 4)
+        //        {
+        //            updateAnimal.Demeanor = item.Value;
+        //        }
+        //        else if (item.Key == 5)
+        //        {
+        //            bool kidFriendly = item.Value.ToUpper() == "TRUE" ? true : false;
+        //            updateAnimal.KidFriendly = kidFriendly;
+        //        }
+        //        else if (item.Key == 6)
+        //        {
+        //            bool petFriendly = item.Value.ToUpper() == "TRUE" ? true : false;
+        //            updateAnimal.PetFriendly = petFriendly;
+        //        }
+        //        else if (item.Key == 7)
+        //        {
+        //            Console.WriteLine("Hello Kitty");
+        //            Console.ReadLine();
+        //            int weight = Convert.ToInt32(item.Value);
+        //            updateAnimal.Weight = weight;
+        //        }
+        //        else if (item.Key == 8)
+        //        {
+        //            //finished
+        //        }
+        //    }
+
+
+        //}
+
+
+        internal static void EnterAnimalUpdate(Animal animal)
+        {
+            UserEmployee userEmployee = new UserEmployee();
+            int input = UserInterface.GetIntegerData();
+            if (input == 1)
+            {
+                ChangeCategory(animal);
+                userEmployee.UpdateAnimal(animal);
+            }
+            else if (input == 2)
+            {
+                ChangeName(animal);
+                userEmployee.UpdateAnimal(animal);
+            }
+            else if (input == 3)
+            {
+                ChangeAge(animal);
+                userEmployee.UpdateAnimal(animal);
+            }
+            else if (input == 4)
+            {
+                ChangeDemeanor(animal);
+                userEmployee.UpdateAnimal(animal);
+            }
+            else if (input == 5)
+            {
+                ChangeKidFriendly(animal);
+                userEmployee.UpdateAnimal(animal);
+            }
+            else if (input == 6)
+            {
+                ChangePetFriendly(animal);
+                userEmployee.UpdateAnimal(animal);
+            }
+            else if (input == 7)
+            {
+                ChangeWeight(animal);
+                userEmployee.UpdateAnimal(animal);
+            }
+            else if (input == 8)
+            {
+                //finish
+
+            }
+        }
+
+
+        internal static void ChangeCategory(Animal animal)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
-
-            Animal updateAnimal = db.Animals.Where(a => a.AnimalId == animal.AnimalId).Single();
-            //--https://social.msdn.microsoft.com/Forums/vstudio/en-US/c98e9d32-7f06-4b3a-8917-8b58eee31e58/change-dictionary-values-while-iterating?forum=netfxbcl
-
-            //"1. Category", "2. Name", "3. Age", "4. Demeanor", "5. Kid friendly", "6. Pet friendly", "7. Weight", "8. Finished"
-            foreach (KeyValuePair<int, string> item in dictionary)
-            {
-                if (item.Key == 1)
-                {
-                    int categoryID = Convert.ToInt32(item.Value);
-                    updateAnimal.CategoryId = categoryID;
-                }
-                else if (item.Key == 2)
-                {
-                    updateAnimal.Name = item.Value;
-                }
-                else if (item.Key == 3)
-                {
-                    int age = Convert.ToInt32(item.Value);
-                    updateAnimal.Age = age;
-                }
-                else if (item.Key == 4)
-                {
-                    updateAnimal.Demeanor = item.Value;
-                }
-                else if (item.Key == 5)
-                {
-                    bool kidFriendly = item.Value.ToUpper() == "TRUE" ? true : false;
-                    updateAnimal.KidFriendly = kidFriendly;
-                }
-                else if (item.Key == 6)
-                {
-                    bool petFriendly = item.Value.ToUpper() == "TRUE" ? true : false;
-                    updateAnimal.PetFriendly = petFriendly;
-                }
-                else if (item.Key == 7)
-                {
-                    int weight = Convert.ToInt32(item.Value);
-                    updateAnimal.Weight = weight;
-                }
-                else if (item.Key == 8)
-                {
-                    //finished
-                }
-            }
-
-
+            Animal updateAnimal = db.Animals.Where(c => c.CategoryId == animal.CategoryId && c.AnimalId == animal.AnimalId).Single();
+            Console.WriteLine("Enter the animal's new Category.");
+            int category = Convert.ToInt32(Console.ReadLine());
+            updateAnimal.CategoryId = category;
+            db.SubmitChanges();
         }
+
+        internal static void ChangeName(Animal animal)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            Animal updateAnimal = db.Animals.Where(n => n.Name == animal.Name && n.AnimalId == animal.AnimalId).Single();
+            Console.WriteLine("Enter the animal's new Name.");
+            string name = Console.ReadLine();
+            updateAnimal.Name = name;
+            db.SubmitChanges();
+        }
+
+        internal static void ChangeAge(Animal animal)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            Animal updateAnimal = db.Animals.Where(a => a.Age == animal.Age && a.AnimalId == animal.AnimalId).Single();
+            Console.WriteLine("Enter the animal's new Age.");
+            int age = Convert.ToInt32(Console.ReadLine());
+            updateAnimal.Age = age;
+            db.SubmitChanges();
+        }
+
+        internal static void ChangeDemeanor(Animal animal)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            Animal updateAnimal = db.Animals.Where(d => d.Demeanor == animal.Demeanor && d.AnimalId == animal.AnimalId).Single();
+            Console.WriteLine("Enter the animal's new Demeanor.");
+            string demeanor = Console.ReadLine();
+            updateAnimal.Demeanor = demeanor;
+            db.SubmitChanges();
+        }
+
+        internal static void ChangeKidFriendly(Animal animal)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            Animal updateAnimal = db.Animals.Where(k => k.KidFriendly == animal.KidFriendly && k.AnimalId == animal.AnimalId).Single();
+            Console.WriteLine("Is the animal kid friendly, 'Yes' or 'No'.");
+            string input = Console.ReadLine();
+            bool kidFriendly = input.ToUpper() == "YES" ? true : false;
+            updateAnimal.KidFriendly = kidFriendly;
+            db.SubmitChanges();
+        }
+        internal static void ChangePetFriendly(Animal animal)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            Animal updateAnimal = db.Animals.Where(p => p.PetFriendly == animal.PetFriendly && p.AnimalId == animal.AnimalId).Single();
+            Console.WriteLine("Is the animal pet friendly, 'Yes' or 'No'.");
+            string input = Console.ReadLine();
+            bool petFriendly = input.ToUpper() == "YES" ? true : false;
+            updateAnimal.PetFriendly = petFriendly;
+            db.SubmitChanges();
+        }
+        internal static void ChangeWeight(Animal animal)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            Animal updateAnimal = db.Animals.Where(w => w.Weight == animal.Weight && w.AnimalId == animal.AnimalId).Single();
+            Console.WriteLine("Enter the animal's new weight.");
+            int weight = Convert.ToInt32(Console.ReadLine());
+            updateAnimal.Weight = weight;
+            db.SubmitChanges();
+        }
+
+        //finish
+
         internal static void AddAnimal(Animal animal)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
