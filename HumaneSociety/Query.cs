@@ -410,20 +410,37 @@ namespace HumaneSociety
             db.SubmitChanges();
         }
         //////////////////////////////////////
+        internal static void MoveAnimal()
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+
+            var duplicates = db.Rooms
+                            .GroupBy(r => r.AnimalId)
+                            .SelectMany(g => g.OrderByDescending(i => i.RoomNumber).Skip(1));
+
+            db.Rooms.DeleteAllOnSubmit(duplicates);
+            db.SubmitChanges();
+
+        }
+
+        internal static void ChangeAnimalRoom()
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            CreateRoom();
+
+        }
+
         internal static void EditDietPlan(string editPlan)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
             DietPlan updateDietPlan = db.DietPlans.FirstOrDefault(d => d.Name == editPlan);
-        
+
             //updateDietPlan.Name = UserInterface.GetStringData("name", "The diet plan's");
             updateDietPlan.FoodType = UserInterface.GetStringData("food type", "The diet plan's new");
             updateDietPlan.FoodAmountInCups = int.Parse(UserInterface.GetStringData("in cup serving", "The food amount"));
             db.SubmitChanges();
 
         }
-
-        /////////////////////////////////////////////
-    
         internal static int GetDietPlanId(string dietPlanID)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
@@ -608,16 +625,6 @@ namespace HumaneSociety
                     return;
                 }
             }
-
-            //Room room = new Room();
-            //var openRoom = db.Rooms.FirstOrDefault(r => r.AnimalId == null);
-            //Room room = new Room();
-            //if (openRoom == null)
-            //{
-            //    Animal animal = new Animal();
-            //    room.AnimalId = animal.AnimalId;
-            //}
-            //db.SubmitChanges();
 
         }
     }
