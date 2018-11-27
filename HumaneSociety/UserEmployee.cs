@@ -140,7 +140,7 @@ namespace HumaneSociety
             bool isFinished = false;
             Console.Clear();
             while(!isFinished){
-                List<string> options = new List<string>() { "Animal found:", animal.Name, animal.Category.Name, "Would you like to:", "1. Get Info", "2. Update Info", "3. Check shots", "4. Change room", "5. Return" };
+                List<string> options = new List<string>() { "Animal found:", animal.Name, animal.Category.Name, "Would you like to:", "1. Get Info", "2. Update Info", "3. Check shots", "4. Add New Shot", "5. Change room", "6. Return" };
                 UserInterface.DisplayUserOptions(options);
                 int input = UserInterface.GetIntegerData();
                 if (input == 5)
@@ -170,6 +170,10 @@ namespace HumaneSociety
                     Console.Clear();
                     return;
                 case 4:
+                    Query.NewShot("booster", animal);
+                    Console.Clear();
+                    return;
+                case 5:
                     ChangeRoom();
                     Console.Clear();
                     return;
@@ -180,9 +184,6 @@ namespace HumaneSociety
         }
         private void ChangeRoom()
         {
-            //int roomNumberChange = UserInterface.GetIntegerData("the animal", "Move the animal");
-            //string animal = UserInterface.GetStringData("animal's room", "Changing the ");
-
             Query.ChangeAnimalRoom();
             Query.MoveAnimal();
         }
@@ -205,9 +206,9 @@ namespace HumaneSociety
             }
             else
             {
-                if (UserInterface.GetBitData("Would you like to Update shots?"))
+                if (UserInterface.GetBitData("There are none for this animal, add a new shot?"))
                 {
-                    Query.UpdateShot("booster", animal);
+                    Query.NewShot("booster", animal);
                 }
             }
             

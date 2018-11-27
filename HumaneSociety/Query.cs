@@ -358,15 +358,28 @@ namespace HumaneSociety
             return db.AnimalShots.Where(c => c.AnimalId == animal.AnimalId);
 
         }
+        internal static void NewShot(string booster, Animal animal)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            AnimalShot getShot = new AnimalShot();
+            getShot.AnimalId = animal.AnimalId;
+            getShot.ShotId = UserInterface.GetIntegerData("shot", "The ID of the ");
+            getShot.DateReceived = DateTime.Now;
+            db.AnimalShots.InsertOnSubmit(getShot);
+            db.SubmitChanges();
+
+        }
+
         internal static void UpdateShot(string booster, Animal animal)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
-            AnimalShot updateAnimalShot = db.AnimalShots.Where(u => u.AnimalId == animal.AnimalId).Single();
-
-            updateAnimalShot.AnimalId = animal.AnimalId;
+            UserInterface.DisplayShot();
+            int input = UserInterface.GetIntegerData("to update", "Select the ID # ");
+            AnimalShot updateAnimalShot = db.AnimalShots.FirstOrDefault(u => u.ShotId == input);
             updateAnimalShot.DateReceived = DateTime.Now;
             db.SubmitChanges();
         }
+
         internal static void RemoveAnimal(Animal animal)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();

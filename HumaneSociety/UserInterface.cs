@@ -260,5 +260,17 @@ namespace HumaneSociety
                 }
             }
         }
+        internal static void DisplayShot()
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            Console.WriteLine("Available shots at humane society:\n");
+            var shot = db.Shots.Select(s => s).ToList();
+            {
+                foreach (Shot list in shot)
+                {
+                    Console.WriteLine("Shot ID : " + " " + list.ShotId + " -  Name: " + " " + list.Name);
+                }
+            }
+        }
     }
 }
